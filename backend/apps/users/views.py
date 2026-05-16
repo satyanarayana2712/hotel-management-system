@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
 # Create your views here.
 from rest_framework import status
@@ -10,20 +12,26 @@ from rest_framework.permissions import AllowAny
 from .serializers import RegisterSerializer
 
 
+from rest_framework.permissions import AllowAny
+
+
+@method_decorator(csrf_exempt, name='dispatch')
 class RegisterView(APIView):
+
+    permission_classes = [AllowAny]
 
     def post(self, request):
 
-        serializer = RegisterSerializer(data=request.data)
+        serializer = RegisterSerializer(
+            data=request.data
+        )
 
         if serializer.is_valid():
 
             serializer.save()
 
             return Response(
-                {
-                    'message': 'User registered successfully'
-                },
+                serializer.data,
                 status=status.HTTP_201_CREATED
             )
 

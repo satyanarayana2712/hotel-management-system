@@ -23,4 +23,8 @@ from django.urls import path
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/users/', include('apps.users.urls')),
+    path('api/rooms/', include('apps.rooms.urls')),
+    path('api/bookings/', include('apps.bookings.urls')),
+    path('api/food/', include('apps.food.urls')),
+    path('api/payment/',include('apps.payments.urls')),
 ]

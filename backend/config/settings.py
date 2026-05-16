@@ -41,19 +41,24 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'apps.users',
+    'apps.rooms',
+    'apps.bookings',
+    'apps.food',
+    'apps.payments',
     'corsheaders',
+
 
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -134,8 +139,21 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.AllowAny',
+    ),
 }
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
 ]
+
+CORS_ALLOW_CREDENTIALS = True
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+]
+
+RAZORPAY_KEY_ID = "rzp_test_Sprykn8591y2fu"
+
+RAZORPAY_KEY_SECRET = "eyr8ZPD4OXViZZM4e7oZla0T"
