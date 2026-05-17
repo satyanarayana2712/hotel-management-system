@@ -69,12 +69,26 @@ class FoodOrderCreateView(APIView):
                 quantity = item_data.get('quantity', 1)
                 notes = item_data.get('notes', '')
                 
+                # Validate quantity
+                try:
+                    quantity = int(quantity)
+                    if quantity <= 0:
+                        return Response(
+                            {'error': f'Quantity must be greater than 0'},
+                            status=status.HTTP_400_BAD_REQUEST
+                        )
+                except (ValueError, TypeError):
+                    return Response(
+                        {'error': f'Invalid quantity value'},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+                
                 # Get food item
                 try:
-                    food_item = FoodItem.objects.get(id=food_id)
+                    food_item = FoodItem.objects.get(id=food_id, available=True)
                 except FoodItem.DoesNotExist:
                     return Response(
-                        {'error': f'Food item with id {food_id} not found'},
+                        {'error': f'Food item with id {food_id} not found or unavailable'},
                         status=status.HTTP_404_NOT_FOUND
                     )
                 
@@ -113,9 +127,14 @@ class FoodOrderCreateView(APIView):
                 status=status.HTTP_201_CREATED
             )
         
+        except FoodItem.DoesNotExist:
+            return Response(
+                {'error': 'One or more food items not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
         except Exception as e:
             return Response(
-                {'error': str(e)},
+                {'error': f'Error creating order: {str(e)}'},
                 status=status.HTTP_400_BAD_REQUEST
             )
 

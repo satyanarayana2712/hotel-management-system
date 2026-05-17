@@ -12,6 +12,7 @@ import FoodMenuPage from './pages/FoodMenuPage'
 import FoodCartPage from './pages/FoodCartPage'
 import MyFoodOrdersPage from './pages/MyFoodOrdersPage'
 import PaymentPage from './pages/PaymentPage'
+import ConformationPage from './pages/ConformationPage'
 
 function App() {
 
@@ -111,6 +112,11 @@ function App() {
              </ProtectedRoute>
            }
          />
+
+      <Route
+         path="/confirmation"
+           element={<ConformationPage />}
+        />
 
       </Routes>
 

@@ -11,6 +11,8 @@ import Toast from '../components/Toast'
 
 import api from '../services/api'
 
+import { getUserStorage, setUserStorage } from '../services/storageUtils'
+
 
 function FoodMenuPage() {
 
@@ -29,11 +31,7 @@ function FoodMenuPage() {
   const [foods, setFoods] = useState([])
 
   const [cart, setCart] = useState(
-
-    JSON.parse(
-      localStorage.getItem('food_cart')
-    ) || []
-
+    getUserStorage('food_cart', [])
   )
 
   const [loading, setLoading] =
@@ -123,13 +121,7 @@ function FoodMenuPage() {
 
     setCart(updatedCart)
 
-
-    localStorage.setItem(
-
-      'food_cart',
-
-      JSON.stringify(updatedCart)
-    )
+    setUserStorage('food_cart', updatedCart)
 
 
     if (returnTo === 'booking') {

@@ -58,7 +58,7 @@ function CheckoutPage() {
   }, [cartFoods])
 
 
-  const finalRoomPrice = roomPrice || 5000
+  const finalRoomPrice = Number(roomPrice || 0)
 
   const finalGrandTotal =
     finalRoomPrice + totalFoodCost

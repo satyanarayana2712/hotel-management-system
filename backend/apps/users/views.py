@@ -1,21 +1,18 @@
 from django.shortcuts import render
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
 
 # Create your views here.
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework_simplejwt.tokens import RefreshToken
+
+from django.contrib.auth import authenticate
 
 from .serializers import RegisterSerializer
+from .models import User
 
 
-from rest_framework.permissions import AllowAny
-
-
-@method_decorator(csrf_exempt, name='dispatch')
 class RegisterView(APIView):
 
     permission_classes = [AllowAny]
@@ -31,7 +28,10 @@ class RegisterView(APIView):
             serializer.save()
 
             return Response(
-                serializer.data,
+                {
+                    'message': 'User registered successfully',
+                    'user': serializer.data
+                },
                 status=status.HTTP_201_CREATED
             )
 
@@ -39,6 +39,59 @@ class RegisterView(APIView):
             serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
         )
+
+
+class LoginView(APIView):
+    """
+    Email-based login endpoint
+    """
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+
+        email = request.data.get('email')
+        password = request.data.get('password')
+
+        if not email or not password:
+            return Response(
+                {'error': 'Email and password required'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response(
+                {'error': 'Invalid email or password'},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+
+        # Authenticate using username (Django expects username)
+        # But we got email, so we need to use the user object
+        if not user.check_password(password):
+            return Response(
+                {'error': 'Invalid email or password'},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+
+        # Generate tokens
+        refresh = RefreshToken.for_user(user)
+
+        return Response(
+            {
+                'access': str(refresh.access_token),
+                'refresh': str(refresh),
+                'user': {
+                    'id': user.id,
+                    'username': user.username,
+                    'email': user.email,
+                    'phone_number': user.phone_number,
+                    'role': user.role,
+                }
+            },
+            status=status.HTTP_200_OK
+        )
+
     
 class ProfileView(APIView):
 

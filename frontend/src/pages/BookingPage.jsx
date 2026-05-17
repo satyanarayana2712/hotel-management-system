@@ -10,6 +10,8 @@ import Navbar from '../components/Navbar'
 
 import api from '../services/api'
 
+import { getUserStorage, setUserStorage } from '../services/storageUtils'
+
 
 function BookingPage() {
 
@@ -36,22 +38,62 @@ function BookingPage() {
   const [foodsLoading, setFoodsLoading] =
     useState(true)
 
+  const [roomDetails, setRoomDetails] =
+    useState(null)
+
+  const checkInDate =
+    location.state?.checkInDate ||
+    location.state?.formData?.check_in_date ||
+    ''
+
+  const checkOutDate =
+    location.state?.checkOutDate ||
+    location.state?.formData?.check_out_date ||
+    ''
+
 
   const [formData, setFormData] =
     useState(
-
-      location.state?.formData || {
-
-        check_in_date: '',
-        check_out_date: '',
+      {
+        check_in_date: checkInDate,
+        check_out_date: checkOutDate,
       }
     )
 
 
-  const roomPrice = 5000
+  const roomPrice = roomDetails?.price_per_night || 0
 
 
   useEffect(() => {
+
+    if (!checkInDate || !checkOutDate) {
+      navigate('/rooms')
+      return
+    }
+
+    setFormData({
+      check_in_date: checkInDate,
+      check_out_date: checkOutDate,
+    })
+
+    const fetchRoomDetails = async () => {
+      try {
+        const response = await api.get('rooms/')
+        const rooms = Array.isArray(response.data)
+          ? response.data
+          : response.data?.results || response.data?.value || response.data?.data || []
+
+        const currentRoom = rooms.find(
+          room => String(room.id) === String(roomId)
+        )
+
+        setRoomDetails(currentRoom || null)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    fetchRoomDetails()
 
     const storedCart =
       JSON.parse(
@@ -62,7 +104,7 @@ function BookingPage() {
 
     setSelectedFoods(storedCart)
 
-  }, [])
+  }, [checkInDate, checkOutDate, navigate, roomId])
 
   useEffect(() => {
 
@@ -222,8 +264,24 @@ function BookingPage() {
   }, [selectedFoods])
 
 
+  const nights = useMemo(() => {
+    if (!formData.check_in_date || !formData.check_out_date) return 0
+
+    const start = new Date(formData.check_in_date)
+    const end = new Date(formData.check_out_date)
+    const diff = Math.ceil((end - start) / (1000 * 60 * 60 * 24))
+
+    return diff > 0 ? diff : 0
+  }, [formData.check_in_date, formData.check_out_date])
+
+
+  const roomCharge = useMemo(() => {
+    return nights * Number(roomPrice || 0)
+  }, [nights, roomPrice])
+
+
   const grandTotal =
-    roomPrice + foodTotal
+    roomCharge + foodTotal
 
 
   const handleSubmit = async (e) => {
@@ -252,8 +310,6 @@ function BookingPage() {
 
           total_price:
             grandTotal.toString(),
-
-          is_confirmed: true,
         }
       )
 
@@ -285,9 +341,7 @@ function BookingPage() {
       }
 
 
-      localStorage.removeItem(
-        'food_cart'
-      )
+      setUserStorage('food_cart', [])
 
       alert(
         'Reservation Successful'
@@ -354,28 +408,24 @@ function BookingPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
 
-                <input
-                  type="date"
-                  name="check_in_date"
-                  value={
-                    formData.check_in_date
-                  }
-                  onChange={handleChange}
-                  className="border border-[#CBD5E1] px-5 py-5"
-                  required
-                />
+                <div className="border border-[#CBD5E1] px-5 py-5">
+                  <p className="text-sm text-[#64748B] mb-2">Check-In Date</p>
+                  <p className="text-lg font-semibold">
+                    {formData.check_in_date
+                      ? new Date(formData.check_in_date).toLocaleDateString()
+                      : '-'}
+                  </p>
+                </div>
 
 
-                <input
-                  type="date"
-                  name="check_out_date"
-                  value={
-                    formData.check_out_date
-                  }
-                  onChange={handleChange}
-                  className="border border-[#CBD5E1] px-5 py-5"
-                  required
-                />
+                <div className="border border-[#CBD5E1] px-5 py-5">
+                  <p className="text-sm text-[#64748B] mb-2">Check-Out Date</p>
+                  <p className="text-lg font-semibold">
+                    {formData.check_out_date
+                      ? new Date(formData.check_out_date).toLocaleDateString()
+                      : '-'}
+                  </p>
+                </div>
 
               </div>
 
@@ -386,14 +436,14 @@ function BookingPage() {
 
                   <h3 className="text-2xl font-bold">
 
-                    Luxury Room
+                    Luxury Room ({nights} night{nights === 1 ? '' : 's'})
 
                   </h3>
 
 
                   <h3 className="text-4xl font-bold">
 
-                    ₹{roomPrice}
+                    ₹{roomCharge}
 
                   </h3>
 
@@ -681,7 +731,7 @@ function BookingPage() {
 
                   <p>Room Charges</p>
 
-                  <p>₹{roomPrice}</p>
+                  <p>₹{roomCharge}</p>
 
                 </div>
 
@@ -726,7 +776,7 @@ function BookingPage() {
                       roomId,
                       formData,
                       selectedFoods,
-                      roomPrice,
+                      roomPrice: roomCharge,
                       foodTotal
                     }
                   })

@@ -7,6 +7,8 @@ import {
 
 import Navbar from '../components/Navbar'
 
+import { getUserStorage, setUserStorage } from '../services/storageUtils'
+
 
 function FoodCartPage() {
 
@@ -23,24 +25,12 @@ function FoodCartPage() {
 
 
   const [cartItems, setCartItems] = useState(
-
-    JSON.parse(
-      localStorage.getItem('food_cart')
-    ) || []
-
+    getUserStorage('food_cart', [])
   )
 
 
   useEffect(() => {
-
-    localStorage.setItem(
-
-      'food_cart',
-
-      JSON.stringify(cartItems)
-
-    )
-
+    setUserStorage('food_cart', cartItems)
   }, [cartItems])
 
 
