@@ -18,9 +18,18 @@ Including another URLconf
 from django.urls import path, include
 from django.contrib import admin
 from django.urls import path
+def home(request):
+
+    return JsonResponse({
+
+        "message":
+        "Hotel Management Backend Running Successfully"
+    })
 
 
 urlpatterns = [
+    path('', home),
+
     path('admin/', admin.site.urls),
     path('api/users/', include('apps.users.urls')),
     path('api/rooms/', include('apps.rooms.urls')),
