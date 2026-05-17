@@ -210,16 +210,20 @@ REST_FRAMEWORK = {
 CORS_ALLOWED_ORIGINS = [
 
     "http://localhost:5173",
-
-    "https://hotel-management-system-7u0umsf7n-satyanarayana2712s-projects.vercel.app",
 ]
-CORS_ALLOW_CREDENTIALS = True
+
+
+CORS_ALLOWED_ORIGIN_REGEXES = [
+
+    r"^https://.*\.vercel\.app$",
+]
+
 
 CSRF_TRUSTED_ORIGINS = [
 
     "http://localhost:5173",
 
-    "https://hotel-management-system-7u0umsf7n-satyanarayana2712s-projects.vercel.app",
+    "https://*.vercel.app",
 ]
 
 # RAZORPAY
