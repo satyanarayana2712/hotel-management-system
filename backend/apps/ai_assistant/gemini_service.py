@@ -7,20 +7,45 @@ from apps.food.models import FoodItem
 from apps.bookings.models import Booking
 
 
-# =========================
-# GEMINI CONFIGURATION
-# =========================
-
-genai.configure(
-
-    api_key=config('GEMINI_API_KEY')
-)
+_gemini_model = None
 
 
-model = genai.GenerativeModel(
+def get_gemini_model():
 
-    'gemini-2.5-flash'
-)
+    global _gemini_model
+
+
+    if _gemini_model is not None:
+
+        return _gemini_model
+
+
+    api_key = config(
+
+        'GEMINI_API_KEY',
+
+        default=''
+    ).strip()
+
+
+    if not api_key:
+
+        return None
+
+
+    genai.configure(
+
+        api_key=api_key
+    )
+
+
+    _gemini_model = genai.GenerativeModel(
+
+        'gemini-2.5-flash'
+    )
+
+
+    return _gemini_model
 
 
 # =========================
@@ -239,6 +264,17 @@ def build_booking_context(user):
 # =========================
 
 def get_ai_response(user_message, user):
+
+    model = get_gemini_model()
+
+
+    if model is None:
+
+        return (
+            "The AI concierge is currently unavailable because the "
+            "GEMINI_API_KEY environment variable is not configured. "
+            "Please add the key on Render to enable chatbot responses."
+        )
 
 
     # FILTER ROOMS
