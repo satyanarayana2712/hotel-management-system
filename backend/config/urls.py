@@ -37,4 +37,5 @@ urlpatterns = [
     path('api/bookings/', include('apps.bookings.urls')),
     path('api/food/', include('apps.food.urls')),
     path('api/payment/',include('apps.payments.urls')),
+    path('api/ai/', include('apps.ai_assistant.urls')),
 ]

@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'apps.bookings',
     'apps.food',
     'apps.payments',
+    'apps.ai_assistant'
 ]
 
 

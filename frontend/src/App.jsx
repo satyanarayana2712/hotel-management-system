@@ -14,14 +14,19 @@ import FoodCartPage from './pages/FoodCartPage'
 import MyFoodOrdersPage from './pages/MyFoodOrdersPage'
 import PaymentPage from './pages/PaymentPage'
 import ConformationPage from './pages/ConformationPage'
+import AIChatbot from './components/AIChatbot'
 
 function App() {
 
   return (
 
-    <BrowserRouter>
+    <div className="app-shell">
 
-      <Routes>
+      <BrowserRouter>
+
+        <main className="app-main">
+
+          <Routes>
 
       <Route
         path="/"
@@ -124,9 +129,15 @@ function App() {
            element={<ConformationPage />}
         />
 
-      </Routes>
+          </Routes>
 
-    </BrowserRouter>
+        </main>
+
+        <AIChatbot />
+
+      </BrowserRouter>
+
+    </div>
 
   )
 }

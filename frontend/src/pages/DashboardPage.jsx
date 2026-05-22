@@ -1,79 +1,50 @@
-
 import { useEffect, useState } from 'react'
 
 import { useNavigate } from 'react-router-dom'
 
+import Navbar from '../components/Navbar'
 import api from '../services/api'
 
-import Navbar from '../components/Navbar'
-
-
 function DashboardPage() {
-
   const navigate = useNavigate()
-
   const [user, setUser] = useState(null)
-
   const [loading, setLoading] = useState(true)
 
-
   useEffect(() => {
-
     fetchUserProfile()
-
   }, [])
 
-
   const fetchUserProfile = async () => {
-
     try {
-
-      const response = await api.get(
-        'users/profile/'
-      )
-
+      const response = await api.get('users/profile/')
       setUser(response.data)
-
     } catch (error) {
-
       console.log(error)
-
-      localStorage.removeItem(
-        'access_token'
-      )
-
-      localStorage.removeItem(
-        'refresh_token'
-      )
-
+      localStorage.removeItem('access_token')
+      localStorage.removeItem('refresh_token')
       navigate('/login')
-
     } finally {
-
       setLoading(false)
     }
   }
 
-
   if (loading) {
-
     return (
-
-      <div className="min-h-screen bg-[#F1F5F9] flex items-center justify-center">
-
-        <h1 className="text-2xl font-semibold text-[#0F172A]">
-
-          Loading Dashboard...
-
-        </h1>
-
+      <div className="flex min-h-screen items-center justify-center px-4">
+        <div className="surface-card flex flex-col items-center gap-4 px-8 py-10 text-center">
+          <div className="loading-dots text-[var(--primary)]" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+          </div>
+          <h1 className="text-3xl">Loading dashboard</h1>
+          <p className="text-[var(--muted)]">Preparing your hotel experience...</p>
+        </div>
       </div>
     )
   }
 
-
   const features = [
-
     {
       title: 'Luxury Rooms',
       description:
@@ -83,7 +54,6 @@ function DashboardPage() {
       image:
         'https://images.unsplash.com/photo-1566665797739-1674de7a421a?q=80&w=1200',
     },
-
     {
       title: 'Premium Dining',
       description:
@@ -93,7 +63,6 @@ function DashboardPage() {
       image:
         'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1200',
     },
-
     {
       title: 'Manage Bookings',
       description:
@@ -105,431 +74,150 @@ function DashboardPage() {
     },
   ]
 
-
   return (
-
-    <div className="min-h-screen bg-[#F1F5F9] text-[#0F172A]">
-
+    <div className="min-h-screen text-[var(--text-strong)]">
       <Navbar />
 
-
-      {/* Hero Section */}
-
-      <section className="bg-[#0F172A] text-white">
-
-        <div className="max-w-7xl mx-auto px-4 lg:px-8 py-24">
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-
-            {/* Left */}
-
+      <section className="page-shell-lg py-6 sm:py-8 lg:py-10">
+        <div className="surface-card-strong overflow-hidden p-6 sm:p-8 lg:p-12">
+          <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
             <div>
-
-              <p className="uppercase tracking-[0.4em] text-sm text-[#CBD5E1] mb-6">
-
-                Luxury Hospitality Platform
-
-              </p>
-
-
-              <h1 className="text-6xl font-bold leading-tight mb-8">
-
-                Experience Premium Comfort
-                And Modern Hospitality
-
+              <span className="section-label">Luxury Hospitality Platform</span>
+              <h1 className="mt-5 text-5xl sm:text-6xl leading-tight">
+                Experience premium comfort and modern hospitality.
               </h1>
-
-
-              <p className="text-xl text-[#CBD5E1] leading-relaxed mb-10 max-w-2xl">
-
-                Welcome back, {user?.username}.
-                Discover elegant rooms, premium dining,
-                and seamless hotel experiences designed
-                for modern travelers.
-
+              <p className="mt-5 max-w-2xl section-copy">
+                Welcome back, {user?.username}. Discover elegant rooms, premium dining, and seamless hotel experiences designed for modern travelers.
               </p>
 
-
-              <div className="flex flex-col sm:flex-row gap-5">
-
-                <button
-                  onClick={() => navigate('/rooms')}
-                  className="bg-white text-[#0F172A] px-8 py-5 rounded-2xl font-semibold hover:bg-[#E2E8F0] transition"
-                >
-
+              <div className="mt-8 flex flex-wrap gap-3">
+                <button onClick={() => navigate('/rooms')} className="btn btn-primary rounded-2xl px-6 py-4">
                   Book A Room
-
                 </button>
-
-
-                <button
-                  onClick={() => navigate('/food-menu')}
-                  className="border border-white text-white px-8 py-5 rounded-2xl font-semibold hover:bg-white hover:text-[#0F172A] transition"
-                >
-
+                <button onClick={() => navigate('/food-menu')} className="btn btn-secondary rounded-2xl px-6 py-4">
                   Explore Dining
-
                 </button>
-
               </div>
-
             </div>
 
-
-            {/* Right */}
-
-            <div className="relative">
-
+            <div className="card overflow-hidden rounded-[28px]">
               <img
                 src="https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1600"
                 alt="Luxury Hotel"
-                className="rounded-3xl shadow-2xl object-cover h-[500px] w-full"
+                className="h-[320px] w-full object-cover sm:h-[380px] lg:h-[460px]"
               />
-
             </div>
-
           </div>
-
         </div>
-
       </section>
 
-
-      {/* Stats */}
-
-      <section className="py-20">
-
-        <div className="max-w-7xl mx-auto px-4 lg:px-8">
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-
-            <div className="bg-white rounded-3xl p-10 border border-[#E2E8F0] shadow-sm">
-
-              <h2 className="text-5xl font-bold mb-4">
-
-                250+
-
-              </h2>
-
-              <p className="text-[#64748B] text-lg">
-
-                Premium Luxury Rooms
-
-              </p>
-
-            </div>
-
-
-            <div className="bg-white rounded-3xl p-10 border border-[#E2E8F0] shadow-sm">
-
-              <h2 className="text-5xl font-bold mb-4">
-
-                24/7
-
-              </h2>
-
-              <p className="text-[#64748B] text-lg">
-
-                Concierge & Room Service
-
-              </p>
-
-            </div>
-
-
-            <div className="bg-white rounded-3xl p-10 border border-[#E2E8F0] shadow-sm">
-
-              <h2 className="text-5xl font-bold mb-4">
-
-                5★
-
-              </h2>
-
-              <p className="text-[#64748B] text-lg">
-
-                Luxury Hospitality Experience
-
-              </p>
-
-            </div>
-
+      <section className="page-shell-lg pb-6 sm:pb-8 lg:pb-12">
+        <div className="container-grid container-grid-3">
+          <div className="card p-6 sm:p-8">
+            <h2 className="text-5xl">250+</h2>
+            <p className="mt-3 text-[var(--muted)]">Premium luxury rooms</p>
           </div>
-
+          <div className="card p-6 sm:p-8">
+            <h2 className="text-5xl">24/7</h2>
+            <p className="mt-3 text-[var(--muted)]">Concierge & room service</p>
+          </div>
+          <div className="card p-6 sm:p-8">
+            <h2 className="text-5xl">5★</h2>
+            <p className="mt-3 text-[var(--muted)]">Luxury hospitality experience</p>
+          </div>
         </div>
-
       </section>
 
-
-      {/* Features */}
-
-      <section className="pb-24">
-
-        <div className="max-w-7xl mx-auto px-4 lg:px-8">
-
-          <div className="mb-16 text-center">
-
-            <h2 className="text-5xl font-bold mb-6">
-
-              Explore Our Services
-
-            </h2>
-
-            <p className="text-[#64748B] text-xl max-w-3xl mx-auto leading-relaxed">
-
-              Designed to provide a seamless and luxurious
-              hospitality experience for every guest.
-
-            </p>
-
-          </div>
-
-
-          <div className="space-y-16">
-
-            {
-              features.map((feature, index) => (
-
-                <div
-                  key={feature.title}
-                  className={`grid grid-cols-1 lg:grid-cols-2 gap-14 items-center ${
-                    index % 2 !== 0
-                      ? 'lg:grid-flow-col-dense'
-                      : ''
-                  }`}
-                >
-
-                  {/* Image */}
-
-                  <div
-                    className={
-                      index % 2 !== 0
-                        ? 'lg:col-start-2'
-                        : ''
-                    }
-                  >
-
-                    <img
-                      src={feature.image}
-                      alt={feature.title}
-                      className="rounded-3xl shadow-xl h-[420px] w-full object-cover"
-                    />
-
-                  </div>
-
-
-                  {/* Content */}
-
-                  <div
-                    className={
-                      index % 2 !== 0
-                        ? 'lg:col-start-1'
-                        : ''
-                    }
-                  >
-
-                    <h3 className="text-4xl font-bold mb-6">
-
-                      {feature.title}
-
-                    </h3>
-
-
-                    <p className="text-[#64748B] text-lg leading-relaxed mb-8">
-
-                      {feature.description}
-
-                    </p>
-
-
-                    <button
-                      onClick={() =>
-                        navigate(feature.path)
-                      }
-                      className="bg-[#0F172A] text-white px-8 py-4 rounded-2xl font-semibold hover:bg-[#1E293B] transition"
-                    >
-
-                      {feature.button}
-
-                    </button>
-
-                  </div>
-
-                </div>
-              ))
-            }
-
-          </div>
-
+      <section className="page-shell-lg pb-6 sm:pb-8 lg:pb-12">
+        <div className="mb-8 text-center">
+          <span className="section-label">Explore Services</span>
+          <h2 className="section-title mt-4">Everything your stay needs, arranged with clarity.</h2>
+          <p className="section-copy mx-auto mt-4 max-w-3xl">
+            Designed to provide a seamless and luxurious hospitality experience for every guest.
+          </p>
         </div>
 
-      </section>
-
-
-      {/* Contact Section */}
-
-      <section className="bg-[#0F172A] text-white py-24">
-
-        <div className="max-w-7xl mx-auto px-4 lg:px-8">
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-
-            <div>
-
-              <p className="uppercase tracking-[0.4em] text-sm text-[#CBD5E1] mb-5">
-
-                Need Assistance?
-
-              </p>
-
-
-              <h2 className="text-5xl font-bold mb-8 leading-tight">
-
-                Our Hospitality Team Is
-                Available 24/7
-
-              </h2>
-
-
-              <p className="text-[#CBD5E1] text-lg leading-relaxed max-w-2xl">
-
-                Contact our concierge team for booking
-                assistance, premium room upgrades,
-                dining support, and luxury hospitality
-                services.
-
-              </p>
-
-            </div>
-
-
-            <div className="bg-white/10 border border-white/10 backdrop-blur-sm rounded-3xl p-10">
-
-              <div className="space-y-8">
-
-                <div>
-
-                  <p className="text-sm uppercase tracking-widest text-[#CBD5E1] mb-2">
-
-                    Contact Number
-
-                  </p>
-
-                  <h3 className="text-3xl font-bold">
-
-                    +91 98765 43210
-
-                  </h3>
-
-                </div>
-
-
-                <div>
-
-                  <p className="text-sm uppercase tracking-widest text-[#CBD5E1] mb-2">
-
-                    Email Address
-
-                  </p>
-
-                  <h3 className="text-2xl font-semibold">
-
-                    support@royalstay.com
-
-                  </h3>
-
-                </div>
-
-
-                <div>
-
-                  <p className="text-sm uppercase tracking-widest text-[#CBD5E1] mb-2">
-
-                    Location
-
-                  </p>
-
-                  <h3 className="text-2xl font-semibold">
-
-                    Hyderabad, India
-
-                  </h3>
-
-                </div>
-
+        <div className="space-y-6 lg:space-y-8">
+          {features.map((feature, index) => (
+            <article
+              key={feature.title}
+              className={`grid gap-6 lg:grid-cols-2 lg:items-center ${index % 2 !== 0 ? 'lg:[direction:rtl]' : ''}`}
+            >
+              <div className={`overflow-hidden rounded-[28px] ${index % 2 !== 0 ? 'lg:[direction:ltr]' : ''}`}>
+                <img
+                  src={feature.image}
+                  alt={feature.title}
+                  className="h-[260px] w-full object-cover sm:h-[340px] lg:h-[420px]"
+                />
               </div>
 
-            </div>
-
-          </div>
-
+              <div className={`surface-card p-6 sm:p-8 ${index % 2 !== 0 ? 'lg:[direction:ltr]' : ''}`}>
+                <h3 className="text-4xl">{feature.title}</h3>
+                <p className="mt-4 section-copy">{feature.description}</p>
+                <button
+                  onClick={() => navigate(feature.path)}
+                  className="btn btn-primary mt-6 rounded-2xl px-6 py-4"
+                >
+                  {feature.button}
+                </button>
+              </div>
+            </article>
+          ))}
         </div>
-
       </section>
 
-
-      {/* Footer */}
-
-      <footer className="bg-white border-t border-[#E2E8F0] py-10">
-
-        <div className="max-w-7xl mx-auto px-4 lg:px-8 flex flex-col lg:flex-row justify-between items-center gap-6">
-
+      <section className="page-shell-lg pb-6 sm:pb-8 lg:pb-12">
+        <div className="surface-card-strong grid gap-8 p-6 sm:p-8 lg:grid-cols-2 lg:p-12">
           <div>
-
-            <h3 className="text-2xl font-bold mb-2">
-
-              Royal Stay
-
-            </h3>
-
-            <p className="text-[#64748B]">
-
-              Luxury Hotel Management Platform
-
+            <span className="section-label">Need Assistance?</span>
+            <h2 className="section-title mt-4">Our hospitality team is available 24/7.</h2>
+            <p className="section-copy mt-4 max-w-2xl">
+              Contact our concierge team for booking assistance, premium room upgrades, dining support, and luxury hospitality services.
             </p>
-
           </div>
 
-
-          <div className="flex gap-8 text-sm text-[#64748B]">
-
-            <button
-              onClick={() => navigate('/rooms')}
-              className="hover:text-[#0F172A] transition"
-            >
-
-              Rooms
-
-            </button>
-
-
-            <button
-              onClick={() => navigate('/food-menu')}
-              className="hover:text-[#0F172A] transition"
-            >
-
-              Dining
-
-            </button>
-
-
-            <button
-              onClick={() => navigate('/my-bookings')}
-              className="hover:text-[#0F172A] transition"
-            >
-
-              Bookings
-
-            </button>
-
+          <div className="card p-6 sm:p-8">
+            <div className="grid gap-6">
+              <div>
+                <p className="text-xs uppercase tracking-[0.22em] text-[var(--muted)]">Contact Number</p>
+                <h3 className="mt-2 text-3xl">+91 98765 43210</h3>
+              </div>
+              <div>
+                <p className="text-xs uppercase tracking-[0.22em] text-[var(--muted)]">Email Address</p>
+                <h3 className="mt-2 text-2xl">support@royalstay.com</h3>
+              </div>
+              <div>
+                <p className="text-xs uppercase tracking-[0.22em] text-[var(--muted)]">Location</p>
+                <h3 className="mt-2 text-2xl">Hyderabad, India</h3>
+              </div>
+            </div>
           </div>
-
         </div>
+      </section>
 
+      <footer className="border-t border-[var(--border)] bg-[color:var(--bg-elevated)] py-8 backdrop-blur-xl">
+        <div className="page-shell-lg flex flex-col gap-4 text-center lg:flex-row lg:items-center lg:justify-between lg:text-left">
+          <div>
+            <h3 className="text-2xl">Royal Stay</h3>
+            <p className="mt-1 text-[var(--muted)]">Luxury Hotel Management Platform</p>
+          </div>
+          <div className="flex flex-wrap justify-center gap-3 lg:justify-end">
+            <button onClick={() => navigate('/rooms')} className="btn btn-ghost rounded-2xl px-5 py-3">
+              Rooms
+            </button>
+            <button onClick={() => navigate('/food-menu')} className="btn btn-ghost rounded-2xl px-5 py-3">
+              Dining
+            </button>
+            <button onClick={() => navigate('/my-bookings')} className="btn btn-ghost rounded-2xl px-5 py-3">
+              Bookings
+            </button>
+          </div>
+        </div>
       </footer>
-
     </div>
   )
 }
 
 export default DashboardPage
+
 

@@ -1,7 +1,8 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: 'https://hotel-management-system-xalj.onrender.com/api/'
+  // baseURL: 'https://hotel-management-system-xalj.onrender.com/api/'
+  baseURL: import.meta.env.VITE_API_BASE_URL
 })
 
 // Add token to requests
