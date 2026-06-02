@@ -50,7 +50,9 @@ INSTALLED_APPS = [
     'apps.bookings',
     'apps.food',
     'apps.payments',
-    'apps.ai_assistant'
+    'apps.ai_assistant',
+    'drf_spectacular',
+    'drf_spectacular_sidecar',
 ]
 
 
@@ -202,6 +204,8 @@ REST_FRAMEWORK = {
 
         'rest_framework.permissions.AllowAny',
     ),
+    'DEFAULT_SCHEMA_CLASS':
+ 'drf_spectacular.openapi.AutoSchema',
 }
 
 
@@ -235,3 +239,13 @@ CSRF_TRUSTED_ORIGINS = [
 RAZORPAY_KEY_ID = "rzp_test_Sprykn8591y2fu"
 
 RAZORPAY_KEY_SECRET = "eyr8ZPD4OXViZZM4e7oZla0T"
+
+SPECTACULAR_SETTINGS = {
+
+    'TITLE': 'Royal Stay Hotel API',
+
+    'DESCRIPTION':
+    'Hotel Management System Backend APIs',
+
+    'VERSION': '1.0.0',
+} 

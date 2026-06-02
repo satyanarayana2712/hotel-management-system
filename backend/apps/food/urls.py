@@ -2,6 +2,9 @@ from django.urls import path
 from .views import (
     FoodItemListView,
     FoodItemDetailView,
+    FoodItemCreateView,
+    FoodItemUpdateView,
+    FoodItemDeleteView,
     FoodOrderCreateView,
     FoodOrderListView,
     FoodOrderDetailView,
@@ -21,6 +24,24 @@ urlpatterns = [
         'items/<int:food_id>/',
         FoodItemDetailView.as_view(),
         name='food-items-detail'
+    ),
+
+    path(
+        'items/create/',
+        FoodItemCreateView.as_view(),
+        name='food-items-create'
+    ),
+
+    path(
+        'items/<int:food_id>/update/',
+        FoodItemUpdateView.as_view(),
+        name='food-items-update'
+    ),
+
+    path(
+        'items/<int:food_id>/delete/',
+        FoodItemDeleteView.as_view(),
+        name='food-items-delete'
     ),
     
     # Food Orders

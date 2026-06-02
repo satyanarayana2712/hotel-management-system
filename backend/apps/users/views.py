@@ -13,6 +13,20 @@ from .serializers import RegisterSerializer
 from .models import User
 
 
+def serialize_user(user):
+    role = 'admin' if user.is_superuser or user.is_staff or user.role == 'admin' else user.role
+
+    return {
+        'id': user.id,
+        'username': user.username,
+        'email': user.email,
+        'phone_number': user.phone_number,
+        'role': role,
+        'is_staff': user.is_staff,
+        'is_superuser': user.is_superuser,
+    }
+
+
 class RegisterView(APIView):
 
     permission_classes = [AllowAny]
@@ -81,13 +95,7 @@ class LoginView(APIView):
             {
                 'access': str(refresh.access_token),
                 'refresh': str(refresh),
-                'user': {
-                    'id': user.id,
-                    'username': user.username,
-                    'email': user.email,
-                    'phone_number': user.phone_number,
-                    'role': user.role,
-                }
+                'user': serialize_user(user)
             },
             status=status.HTTP_200_OK
         )
@@ -101,12 +109,4 @@ class ProfileView(APIView):
 
         user = request.user
 
-        data = {
-            'id': user.id,
-            'username': user.username,
-            'email': user.email,
-            'phone_number': user.phone_number,
-            'role': user.role,
-        }
-
-        return Response(data)    
+        return Response(serialize_user(user))    

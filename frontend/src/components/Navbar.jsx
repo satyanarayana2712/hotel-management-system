@@ -3,18 +3,32 @@ import { useState } from 'react'
 
 import { useLocation, useNavigate } from 'react-router-dom'
 
+const getStoredUser = () => {
+  try {
+    return JSON.parse(localStorage.getItem('user') || 'null')
+  } catch (error) {
+    return null
+  }
+}
+
 function Navbar() {
   const navigate = useNavigate()
   const location = useLocation()
   const [profileOpen, setProfileOpen] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const currentUser = getStoredUser()
+  const isAdminUser = currentUser?.role === 'admin' || currentUser?.is_staff || currentUser?.is_superuser
 
   const navItems = [
     { label: 'Dashboard', path: '/dashboard' },
     { label: 'Rooms', path: '/rooms' },
-    { label: 'My Bookings', path: '/my-bookings' },
     { label: 'Food Menu', path: '/food-menu' },
-    { label: 'Food Orders', path: '/my-food-orders' },
+    ...(!isAdminUser
+      ? [
+          { label: 'My Bookings', path: '/my-bookings' },
+          { label: 'Food Orders', path: '/my-food-orders' },
+        ]
+      : []),
   ]
 
   const handleNavigate = (path) => {
@@ -26,6 +40,7 @@ function Navbar() {
   const handleLogout = () => {
     localStorage.removeItem('access_token')
     localStorage.removeItem('refresh_token')
+    localStorage.removeItem('user')
     navigate('/login')
   }
 
@@ -89,20 +104,24 @@ function Navbar() {
 
             {profileOpen && (
               <div className="absolute right-0 mt-3 w-64 overflow-hidden rounded-[22px] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-lg)]">
-                <button
-                  type="button"
-                  onClick={() => handleNavigate('/my-bookings')}
-                  className="w-full px-5 py-4 text-left text-sm font-medium hover:bg-[var(--primary-soft)]"
-                >
-                  My Bookings
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleNavigate('/my-food-orders')}
-                  className="w-full px-5 py-4 text-left text-sm font-medium hover:bg-[var(--primary-soft)]"
-                >
-                  My Food Orders
-                </button>
+                {!isAdminUser && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => handleNavigate('/my-bookings')}
+                      className="w-full px-5 py-4 text-left text-sm font-medium hover:bg-[var(--primary-soft)]"
+                    >
+                      My Bookings
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleNavigate('/my-food-orders')}
+                      className="w-full px-5 py-4 text-left text-sm font-medium hover:bg-[var(--primary-soft)]"
+                    >
+                      My Food Orders
+                    </button>
+                  </>
+                )}
                 <button
                   type="button"
                   onClick={() => handleNavigate('/profile')}

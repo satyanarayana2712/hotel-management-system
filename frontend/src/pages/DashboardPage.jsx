@@ -9,6 +9,7 @@ function DashboardPage() {
   const navigate = useNavigate()
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
+  const isAdminUser = user?.role === 'admin' || user?.is_staff || user?.is_superuser
 
   useEffect(() => {
     fetchUserProfile()
@@ -44,7 +45,7 @@ function DashboardPage() {
     )
   }
 
-  const features = [
+  const customerFeatures = [
     {
       title: 'Luxury Rooms',
       description:
@@ -74,6 +75,33 @@ function DashboardPage() {
     },
   ]
 
+  const adminQuickActions = [
+    {
+      title: 'Manage Rooms',
+      description: 'Create, update, and remove rooms from the live inventory.',
+      button: 'Open Rooms Manager',
+      path: '/rooms',
+      image:
+        'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?q=80&w=1200',
+    },
+    {
+      title: 'Manage Food Menu',
+      description: 'Maintain menu items, pricing, availability, and kitchen-ready details.',
+      button: 'Open Food Manager',
+      path: '/food-menu',
+      image:
+        'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1200',
+    },
+    {
+      title: 'Hotel Operations',
+      description: 'Move between bookings, rooms, and dining tools from one control center.',
+      button: 'Go to Rooms',
+      path: '/rooms',
+      image:
+        'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?q=80&w=1200',
+    },
+  ]
+
   return (
     <div className="min-h-screen text-[var(--text-strong)]">
       <Navbar />
@@ -82,20 +110,32 @@ function DashboardPage() {
         <div className="surface-card-strong overflow-hidden p-6 sm:p-8 lg:p-12">
           <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
             <div>
-              <span className="section-label">Luxury Hospitality Platform</span>
+              <span className="section-label">
+                {isAdminUser ? 'Hotel Operations Console' : 'Luxury Hospitality Platform'}
+              </span>
               <h1 className="mt-5 text-5xl sm:text-6xl leading-tight">
-                Experience premium comfort and modern hospitality.
+                {isAdminUser
+                  ? 'Control rooms, dining, and guest services from one dashboard.'
+                  : 'Experience premium comfort and modern hospitality.'}
               </h1>
               <p className="mt-5 max-w-2xl section-copy">
-                Welcome back, {user?.username}. Discover elegant rooms, premium dining, and seamless hotel experiences designed for modern travelers.
+                {isAdminUser
+                  ? `Welcome back, ${user?.username}. Manage rooms and food inventory, keep operations current, and move quickly between admin tools.`
+                  : `Welcome back, ${user?.username}. Discover elegant rooms, premium dining, and seamless hotel experiences designed for modern travelers.`}
               </p>
 
               <div className="mt-8 flex flex-wrap gap-3">
-                <button onClick={() => navigate('/rooms')} className="btn btn-primary rounded-2xl px-6 py-4">
-                  Book A Room
+                <button
+                  onClick={() => navigate('/rooms')}
+                  className="btn btn-primary rounded-2xl px-6 py-4"
+                >
+                  {isAdminUser ? 'Manage Rooms' : 'Book A Room'}
                 </button>
-                <button onClick={() => navigate('/food-menu')} className="btn btn-secondary rounded-2xl px-6 py-4">
-                  Explore Dining
+                <button
+                  onClick={() => navigate('/food-menu')}
+                  className="btn btn-secondary rounded-2xl px-6 py-4"
+                >
+                  {isAdminUser ? 'Manage Food Menu' : 'Explore Dining'}
                 </button>
               </div>
             </div>
@@ -113,32 +153,57 @@ function DashboardPage() {
 
       <section className="page-shell-lg pb-6 sm:pb-8 lg:pb-12">
         <div className="container-grid container-grid-3">
-          <div className="card p-6 sm:p-8">
-            <h2 className="text-5xl">250+</h2>
-            <p className="mt-3 text-[var(--muted)]">Premium luxury rooms</p>
-          </div>
-          <div className="card p-6 sm:p-8">
-            <h2 className="text-5xl">24/7</h2>
-            <p className="mt-3 text-[var(--muted)]">Concierge & room service</p>
-          </div>
-          <div className="card p-6 sm:p-8">
-            <h2 className="text-5xl">5★</h2>
-            <p className="mt-3 text-[var(--muted)]">Luxury hospitality experience</p>
-          </div>
+          {isAdminUser ? (
+            <>
+              <div className="card p-6 sm:p-8">
+                <h2 className="text-5xl">Rooms</h2>
+                <p className="mt-3 text-[var(--muted)]">Create and update live room inventory</p>
+              </div>
+              <div className="card p-6 sm:p-8">
+                <h2 className="text-5xl">Food</h2>
+                <p className="mt-3 text-[var(--muted)]">Maintain menu items and availability</p>
+              </div>
+              <div className="card p-6 sm:p-8">
+                <h2 className="text-5xl">Ops</h2>
+                <p className="mt-3 text-[var(--muted)]">Move faster across hotel management tools</p>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="card p-6 sm:p-8">
+                <h2 className="text-5xl">250+</h2>
+                <p className="mt-3 text-[var(--muted)]">Premium luxury rooms</p>
+              </div>
+              <div className="card p-6 sm:p-8">
+                <h2 className="text-5xl">24/7</h2>
+                <p className="mt-3 text-[var(--muted)]">Concierge & room service</p>
+              </div>
+              <div className="card p-6 sm:p-8">
+                <h2 className="text-5xl">5★</h2>
+                <p className="mt-3 text-[var(--muted)]">Luxury hospitality experience</p>
+              </div>
+            </>
+          )}
         </div>
       </section>
 
       <section className="page-shell-lg pb-6 sm:pb-8 lg:pb-12">
         <div className="mb-8 text-center">
-          <span className="section-label">Explore Services</span>
-          <h2 className="section-title mt-4">Everything your stay needs, arranged with clarity.</h2>
+          <span className="section-label">{isAdminUser ? 'Admin Shortcuts' : 'Explore Services'}</span>
+          <h2 className="section-title mt-4">
+            {isAdminUser
+              ? 'Fast access to the management screens you use most.'
+              : 'Everything your stay needs, arranged with clarity.'}
+          </h2>
           <p className="section-copy mx-auto mt-4 max-w-3xl">
-            Designed to provide a seamless and luxurious hospitality experience for every guest.
+            {isAdminUser
+              ? 'Jump directly into room operations and menu control without leaving the dashboard.'
+              : 'Designed to provide a seamless and luxurious hospitality experience for every guest.'}
           </p>
         </div>
 
         <div className="space-y-6 lg:space-y-8">
-          {features.map((feature, index) => (
+          {(isAdminUser ? adminQuickActions : customerFeatures).map((feature, index) => (
             <article
               key={feature.title}
               className={`grid gap-6 lg:grid-cols-2 lg:items-center ${index % 2 !== 0 ? 'lg:[direction:rtl]' : ''}`}
@@ -166,34 +231,36 @@ function DashboardPage() {
         </div>
       </section>
 
-      <section className="page-shell-lg pb-6 sm:pb-8 lg:pb-12">
-        <div className="surface-card-strong grid gap-8 p-6 sm:p-8 lg:grid-cols-2 lg:p-12">
-          <div>
-            <span className="section-label">Need Assistance?</span>
-            <h2 className="section-title mt-4">Our hospitality team is available 24/7.</h2>
-            <p className="section-copy mt-4 max-w-2xl">
-              Contact our concierge team for booking assistance, premium room upgrades, dining support, and luxury hospitality services.
-            </p>
-          </div>
+      {!isAdminUser && (
+        <section className="page-shell-lg pb-6 sm:pb-8 lg:pb-12">
+          <div className="surface-card-strong grid gap-8 p-6 sm:p-8 lg:grid-cols-2 lg:p-12">
+            <div>
+              <span className="section-label">Need Assistance?</span>
+              <h2 className="section-title mt-4">Our hospitality team is available 24/7.</h2>
+              <p className="section-copy mt-4 max-w-2xl">
+                Contact our concierge team for booking assistance, premium room upgrades, dining support, and luxury hospitality services.
+              </p>
+            </div>
 
-          <div className="card p-6 sm:p-8">
-            <div className="grid gap-6">
-              <div>
-                <p className="text-xs uppercase tracking-[0.22em] text-[var(--muted)]">Contact Number</p>
-                <h3 className="mt-2 text-3xl">+91 98765 43210</h3>
-              </div>
-              <div>
-                <p className="text-xs uppercase tracking-[0.22em] text-[var(--muted)]">Email Address</p>
-                <h3 className="mt-2 text-2xl">support@royalstay.com</h3>
-              </div>
-              <div>
-                <p className="text-xs uppercase tracking-[0.22em] text-[var(--muted)]">Location</p>
-                <h3 className="mt-2 text-2xl">Hyderabad, India</h3>
+            <div className="card p-6 sm:p-8">
+              <div className="grid gap-6">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.22em] text-[var(--muted)]">Contact Number</p>
+                  <h3 className="mt-2 text-3xl">+91 98765 43210</h3>
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-[0.22em] text-[var(--muted)]">Email Address</p>
+                  <h3 className="mt-2 text-2xl">support@royalstay.com</h3>
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-[0.22em] text-[var(--muted)]">Location</p>
+                  <h3 className="mt-2 text-2xl">Hyderabad, India</h3>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <footer className="border-t border-[var(--border)] bg-[color:var(--bg-elevated)] py-8 backdrop-blur-xl">
         <div className="page-shell-lg flex flex-col gap-4 text-center lg:flex-row lg:items-center lg:justify-between lg:text-left">
@@ -208,9 +275,11 @@ function DashboardPage() {
             <button onClick={() => navigate('/food-menu')} className="btn btn-ghost rounded-2xl px-5 py-3">
               Dining
             </button>
-            <button onClick={() => navigate('/my-bookings')} className="btn btn-ghost rounded-2xl px-5 py-3">
-              Bookings
-            </button>
+            {!isAdminUser && (
+              <button onClick={() => navigate('/my-bookings')} className="btn btn-ghost rounded-2xl px-5 py-3">
+                Bookings
+              </button>
+            )}
           </div>
         </div>
       </footer>

@@ -1,0 +1,432 @@
+{
+  "info": {
+    "_postman_id": "c0b3b0b1-5f5a-4a70-8b1d-0f6ef9d9c001",
+    "name": "Hotel Management System API",
+    "description": "Postman collection for authentication, rooms, and food APIs.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000/api/v1"
+    },
+    {
+      "key": "access_token",
+      "value": ""
+    },
+    {
+      "key": "refresh_token",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/users/register/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "register",
+                ""
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"john_doe\",\n  \"email\": \"john@example.com\",\n  \"phone_number\": \"9876543210\",\n  \"role\": \"customer\",\n  \"password\": \"StrongPass123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/users/login/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "login",
+                ""
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"StrongPass123\"\n}"
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "const response = pm.response.json();",
+                    "if (response.access) {",
+                    "  pm.collectionVariables.set('access_token', response.access);",
+                    "}",
+                    "if (response.refresh) {",
+                    "  pm.collectionVariables.set('refresh_token', response.refresh);",
+                    "}"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/users/token/refresh/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "token",
+                "refresh",
+                ""
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh\": \"{{refresh_token}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/users/profile/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "profile",
+                ""
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Rooms",
+      "item": [
+        {
+          "name": "List Rooms",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/rooms/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "rooms",
+                ""
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Room",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/rooms/create/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "rooms",
+                "create",
+                ""
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"room_number\": \"A101\",\n  \"room_type\": \"single\",\n  \"price_per_night\": 1200,\n  \"capacity\": 1,\n  \"description\": \"Compact room\",\n  \"is_available\": true\n}"
+            }
+          }
+        },
+        {
+          "name": "Update Room",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/rooms/update/1/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "rooms",
+                "update",
+                "1",
+                ""
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"room_number\": \"A101\",\n  \"room_type\": \"single\",\n  \"price_per_night\": 1400,\n  \"capacity\": 1,\n  \"description\": \"Updated description\",\n  \"is_available\": true\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Room",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/rooms/delete/1/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "rooms",
+                "delete",
+                "1",
+                ""
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Food",
+      "item": [
+        {
+          "name": "List Food Items",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/food/items/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "food",
+                "items",
+                ""
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Food Item",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/food/items/create/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "food",
+                "items",
+                "create",
+                ""
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Paneer Tikka\",\n  \"description\": \"Grilled paneer with spices\",\n  \"category\": \"starter\",\n  \"price\": 350,\n  \"image_url\": \"https://example.com/paneer.jpg\",\n  \"available\": true,\n  \"preparation_time\": 20,\n  \"is_vegetarian\": true,\n  \"is_vegan\": false\n}"
+            }
+          }
+        },
+        {
+          "name": "Update Food Item",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/food/items/1/update/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "food",
+                "items",
+                "1",
+                "update",
+                ""
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Paneer Tikka\",\n  \"description\": \"Updated description\",\n  \"category\": \"starter\",\n  \"price\": 375,\n  \"image_url\": \"https://example.com/paneer.jpg\",\n  \"available\": true,\n  \"preparation_time\": 20,\n  \"is_vegetarian\": true,\n  \"is_vegan\": false\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Food Item",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/food/items/1/delete/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "food",
+                "items",
+                "1",
+                "delete",
+                ""
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Food Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/food/orders/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "food",
+                "orders",
+                ""
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    {\n      \"food_item_id\": 1,\n      \"quantity\": 2,\n      \"notes\": \"Less spicy\"\n    }\n  ],\n  \"special_instructions\": \"Call before delivery\"\n}"
+            }
+          }
+        },
+        {
+          "name": "My Food Orders",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/food/orders/my-orders/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "food",
+                "orders",
+                "my-orders",
+                ""
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

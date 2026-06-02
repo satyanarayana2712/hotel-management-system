@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-const LOCAL_API_URL = 'http://127.0.0.1:8000/api/'
-const PRODUCTION_API_URL = 'https://hotel-management-system-xalj.onrender.com/api/'
+const LOCAL_API_URL = 'http://127.0.0.1:8000/api/v1/'
+const PRODUCTION_API_URL = 'https://hotel-management-system-xalj.onrender.com/api/v1/'
 
 const api = axios.create({
   baseURL:

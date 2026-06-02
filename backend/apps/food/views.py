@@ -7,6 +7,7 @@ from django.utils import timezone
 
 from .models import FoodItem, FoodOrder, OrderItem
 from .serializers import FoodItemSerializer, FoodOrderSerializer, OrderItemSerializer
+from apps.users.permissions import IsAdmin, is_admin_user
 
 
 class FoodItemListView(APIView):
@@ -18,14 +19,32 @@ class FoodItemListView(APIView):
         """Get all food items, optionally filter by category"""
         
         category = request.query_params.get('category')
-        
+
+        items = FoodItem.objects.all()
+
+        if not is_admin_user(request.user):
+            items = items.filter(available=True)
+
         if category:
-            items = FoodItem.objects.filter(category=category, available=True)
-        else:
-            items = FoodItem.objects.filter(available=True)
+            items = items.filter(category=category)
         
         serializer = FoodItemSerializer(items, many=True)
         return Response(serializer.data)
+
+
+class FoodItemCreateView(APIView):
+    """Create a new food item"""
+
+    permission_classes = [IsAuthenticated, IsAdmin]
+
+    def post(self, request):
+        serializer = FoodItemSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class FoodItemDetailView(APIView):
@@ -39,6 +58,36 @@ class FoodItemDetailView(APIView):
         food_item = get_object_or_404(FoodItem, id=food_id)
         serializer = FoodItemSerializer(food_item)
         return Response(serializer.data)
+
+
+class FoodItemUpdateView(APIView):
+    """Update an existing food item"""
+
+    permission_classes = [IsAuthenticated, IsAdmin]
+
+    def put(self, request, food_id):
+        food_item = get_object_or_404(FoodItem, id=food_id)
+        serializer = FoodItemSerializer(food_item, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class FoodItemDeleteView(APIView):
+    """Delete a food item"""
+
+    permission_classes = [IsAuthenticated, IsAdmin]
+
+    def delete(self, request, food_id):
+        food_item = get_object_or_404(FoodItem, id=food_id)
+        food_item.delete()
+        return Response(
+            {'message': 'Food item deleted successfully'},
+            status=status.HTTP_200_OK
+        )
 
 
 class FoodOrderCreateView(APIView):
@@ -201,7 +250,7 @@ class FoodOrderStatusUpdateView(APIView):
         """Update order status"""
         
         # Check if user is admin
-        if request.user.role != 'admin':
+        if not is_admin_user(request.user):
             return Response(
                 {'error': 'Only admin can update order status'},
                 status=status.HTTP_403_FORBIDDEN

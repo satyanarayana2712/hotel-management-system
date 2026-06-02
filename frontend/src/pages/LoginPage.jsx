@@ -14,6 +14,14 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
 
+  const getPostLoginPath = (user) => {
+    if (user?.role === 'admin' || user?.is_superuser || user?.is_staff) {
+      return '/rooms'
+    }
+
+    return '/dashboard'
+  }
+
   const handleChange = (e) => {
     const { name, value } = e.target
     setFormData(prev => ({
@@ -37,10 +45,11 @@ export default function LoginPage() {
 
       localStorage.setItem('access_token', response.data.access)
       localStorage.setItem('refresh_token', response.data.refresh)
+      localStorage.setItem('user', JSON.stringify(response.data.user))
       setSuccess(true)
 
       setTimeout(() => {
-        navigate('/dashboard')
+        navigate(getPostLoginPath(response.data.user), { replace: true })
       }, 900)
     } catch (err) {
       console.error('Login error:', err)
