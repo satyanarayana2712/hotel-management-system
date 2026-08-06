@@ -1,0 +1,101 @@
+[33mcommit f577ab357ed433d0e5b6cd196a9149a1be831f3d[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/internship-version[m[33m, [m[1;32minternship-version[m[33m)[m
+Author: Satyanarayana Alla <179123636+satyanarayana2712@users.noreply.github.com>
+Date:   Tue Jun 2 11:24:41 2026 +0530
+
+    Added admin ui and intrenship requirements
+
+[33mcommit 079c6124e9d9c2cba6ebdc1899433b36b44281aa[m
+Author: Satyanarayana Alla <179123636+satyanarayana2712@users.noreply.github.com>
+Date:   Fri May 22 14:03:41 2026 +0530
+
+    Configured production and local API environments and ai fix
+
+[33mcommit 3fd7545d646540dde26d31002712a3ebcb1c3ab6[m
+Author: Satyanarayana Alla <179123636+satyanarayana2712@users.noreply.github.com>
+Date:   Fri May 22 13:52:36 2026 +0530
+
+    Configured production and local API environments
+
+[33mcommit fed0dc142182eee5419c07c71f9d804a8f280c40[m
+Author: Satyanarayana Alla <179123636+satyanarayana2712@users.noreply.github.com>
+Date:   Sun May 17 13:26:24 2026 +0530
+
+    Fixed JsonResponse import
+
+[33mcommit 9d2515eb46d6b6b521f8dfdb10d2b9d5245f45d6[m
+Author: Satyanarayana Alla <179123636+satyanarayana2712@users.noreply.github.com>
+Date:   Sun May 17 13:24:24 2026 +0530
+
+    Added Vercel React routing support
+
+[33mcommit 17b03be550e43007dc4fb7ebb38a61c125f55082[m
+Author: Satyanarayana Alla <179123636+satyanarayana2712@users.noreply.github.com>
+Date:   Sun May 17 13:14:55 2026 +0530
+
+    Added wildcard Vercel CORS support
+
+[33mcommit 5ae768625600e73171c4bed32c6b4539f39558db[m
+Author: Satyanarayana Alla <179123636+satyanarayana2712@users.noreply.github.com>
+Date:   Sun May 17 13:10:01 2026 +0530
+
+    Fixed Vercel CORS URL
+
+[33mcommit 518bc0930f90d4ff1659a4072fe828c5e34a4487[m
+Author: Satyanarayana Alla <179123636+satyanarayana2712@users.noreply.github.com>
+Date:   Sun May 17 13:00:56 2026 +0530
+
+    Added Vercel frontend domain
+
+[33mcommit f460ad40389409d9bd643b69fa67f5ba55467782[m
+Author: Satyanarayana Alla <179123636+satyanarayana2712@users.noreply.github.com>
+Date:   Sun May 17 12:54:44 2026 +0530
+
+    Added default login redirect
+
+[33mcommit e641fc53299282cb9970c8c214967f5ade1fb2d8[m
+Author: Satyanarayana Alla <179123636+satyanarayana2712@users.noreply.github.com>
+Date:   Sun May 17 12:34:55 2026 +0530
+
+    Connected frontend with production backend and home page
+
+[33mcommit 99f650f5bf2bbdde18948f34140c1690cdfcd630[m
+Author: Satyanarayana Alla <179123636+satyanarayana2712@users.noreply.github.com>
+Date:   Sun May 17 11:16:38 2026 +0530
+
+    Prepared backend for deployment
+
+[33mcommit bd885ae4daedd0bec1fa187018ca78fbd33cff63[m
+Author: Satyanarayana Alla <179123636+satyanarayana2712@users.noreply.github.com>
+Date:   Sun May 17 10:53:05 2026 +0530
+
+    Completed hotel management system with payments and booking workflow
+
+[33mcommit ff5b68d288f56d45fa157a74171fb9de07da29e9[m
+Author: Satyanarayana Alla <179123636+satyanarayana2712@users.noreply.github.com>
+Date:   Sat May 16 13:50:58 2026 +0530
+
+    Implemented hotel booking, food ordering and Razorpay payment integration
+
+[33mcommit 5aa6cac2ee07f75c100381b2e3247dbfb5153b9d[m
+Author: Satyanarayana Alla <179123636+satyanarayana2712@users.noreply.github.com>
+Date:   Tue May 12 17:32:09 2026 +0530
+
+    Completed full authentication system
+
+[33mcommit 45657dd91908bf189f91878e4e44568a39970fd1[m
+Author: Satyanarayana Alla <179123636+satyanarayana2712@users.noreply.github.com>
+Date:   Tue May 12 13:31:51 2026 +0530
+
+    Implemented JWT authentication system
+
+[33mcommit a71982f97b146c292b5fa45f9683fba3c1e44b12[m
+Author: Satyanarayana Alla <179123636+satyanarayana2712@users.noreply.github.com>
+Date:   Mon May 11 11:34:09 2026 +0530
+
+    Added project folder placeholders
+
+[33mcommit 631556be0611cb10792ed86e476f61d9c4b31a75[m
+Author: Satyanarayana Alla <179123636+satyanarayana2712@users.noreply.github.com>
+Date:   Mon May 11 11:26:34 2026 +0530
+
+    Initial project structure setup
