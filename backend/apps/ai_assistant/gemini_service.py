@@ -1,4 +1,4 @@
-import google.generativeai as genai
+from google import genai
 
 from decouple import config
 
@@ -33,17 +33,9 @@ def get_gemini_model():
         return None
 
 
-    genai.configure(
-
-        api_key=api_key
-    )
-
-
-    _gemini_model = genai.GenerativeModel(
-
-        'gemini-2.5-flash'
-    )
-
+    _gemini_model = genai.Client(
+    api_key=api_key
+)
 
     return _gemini_model
 
@@ -359,9 +351,9 @@ def get_ai_response(user_message, user):
     """
 
 
-    response = model.generate_content(
-        prompt
+    response = model.models.generate_content(
+    model="gemini-3.5-flash-lite",
+    contents=prompt,
     )
-
 
     return response.text
