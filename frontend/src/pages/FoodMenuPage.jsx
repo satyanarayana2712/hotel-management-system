@@ -545,11 +545,15 @@ function FoodMenuPage() {
                 className="bg-white border border-[#E2E8F0] overflow-hidden rounded-2xl shadow-sm"
               >
 
-                <img
-                  src={food.image_url}
-                  alt={food.name}
-                  className="w-full h-56 sm:h-64 lg:h-72 object-cover"
-                />
+    <img
+    src={food.image_url?.trim()}
+    alt={food.name}
+    onError={(e) => {
+        e.target.src =
+            "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38";
+    }}
+    className="w-full h-56 sm:h-64 lg:h-72 object-cover"
+     />
 
 
                 <div className="p-5 sm:p-6 lg:p-8">

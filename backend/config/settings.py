@@ -117,14 +117,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # DATABASE
 
+
+
 DATABASES = {
-
-    'default': dj_database_url.config(
-
-        default=config(
-            'DATABASE_URL',
-            default=''
-        )
+    "default": dj_database_url.parse(
+        config("DATABASE_URL")
     )
 }
 
